@@ -139,6 +139,8 @@ public class Client {
 				issueWorkerCommand(unit,commands);
 			}else if(unit.type.equalsIgnoreCase(Unit.Types.SCOUT.toString())){
 				issueScoutCommand(unit,commands);
+			} else if(unit.type.equalsIgnoreCase(Unit.Types.TANK.toString())){
+				issueTankCommand(unit,commands);
 			}
 			issueBaseCommand(commands);
 
@@ -212,7 +214,7 @@ public class Client {
 				mineResource(unit.id,NavigationHelper.getDirection(unit,tile,gameMap),commands);
 			}
 			// otherwise return to base
-			else if(unit.hasResources()){
+			else if(unit!=null &&unit.hasResources()){
 				try{
 					moveUnit(unit.id,NavigationHelper.navigateTo(unit,gameMap.getTile(new Coordinates(0,0)),gameMap),commands);
 				}catch (Exception e){
@@ -247,8 +249,19 @@ public class Client {
 	public void issueBaseCommand(JSONArray commands){
 		if(numScouts<3){
 			buildScout(commands);
-		}else{
+		}
+		else if(numTanks > 5){
 			buildWorker(commands);
+		} else{
+			buildTank(commands);
+		}
+	}
+	public void issueTankCommand(Unit unit, JSONArray commands){
+		List<Unit> unitsInRange = NavigationHelper.enemiesInRange(unit,enemyUnits.values());
+		if(unitsInRange.size()>0&&unit.canAttack){
+			long dx =Math.abs(unitsInRange.get(0).x-unit.x);
+			long dy =Math.abs(unitsInRange.get(0).y-unit.y);
+			shoot(unit.id,dx,dy,commands);
 		}
 	}
 
@@ -289,5 +302,12 @@ public class Client {
 		command.put("unit", unitId);
 		commands.add(command);
 	}
-
+	public void shoot(long unitId, long x, long y, JSONArray commands){
+		JSONObject command = new JSONObject();
+		command.put("command", "SHOOT");
+		command.put("dx", x);
+		command.put("dy", y);
+		command.put("unit", unitId);
+		commands.add(command);
+	}
 }

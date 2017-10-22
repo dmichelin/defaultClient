@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.stream.Collectors;
 
 public class NavigationHelper {
     /**
@@ -114,5 +115,10 @@ public class NavigationHelper {
                 currentTile=cameFrom.get(currentTile.getCoordinates().toString());
         }
         return directions.get(directions.size()-2);
+    }
+
+    public static List<Unit> enemiesInRange(Unit unit, Collection<Unit> enemies){
+        List<Unit> unitsInRange = enemies.stream().filter(unit1 -> (Math.abs(unit.x-unit1.x)<3&&(Math.abs(unit.y-unit1.y)<3))&&(Math.abs(unit.x-unit1.x)>0&&(Math.abs(unit.y-unit1.y)>0))).collect(Collectors.toList());
+        return unitsInRange;
     }
 }
