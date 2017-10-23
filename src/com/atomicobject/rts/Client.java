@@ -188,7 +188,7 @@ public class Client {
 			} catch (Exception e) {
 				moveUnit(unit.id, Directions.values()[(int) Math.floor(Math.random() * 4)], commands);
 			}
-		} else if (baseCoords != null && numWorkers > 15 && unit.id % 2 == 0) {
+		} else if (baseCoords != null && numWorkers > 22 && unit.id % 2 == 0) {
 			if(NavigationHelper.isNextTo(unit,gameMap.getTile(baseCoords))){
 				melee(unit.id,base.id,commands);
 			}
