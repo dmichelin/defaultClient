@@ -42,7 +42,7 @@ public class Unit {
 	}
 
 	public boolean hasResources(){
-		return resource != 0;
+		return resource != null && resource != 0;
 	}
 	public Coordinates getCoordinates(){
 		return new Coordinates(x,y);

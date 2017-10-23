@@ -27,6 +27,7 @@ public class Client {
 	Unit base = null;
 	GameMap gameMap = new GameMap();
 	Unit friendlyBase = null;
+	boolean doomsday = false;
 
 	public Client(Socket socket) {
 		updates = new LinkedBlockingQueue<Map<String, Object>>();
@@ -75,6 +76,9 @@ public class Client {
 	private void processUpdateFromServer() throws InterruptedException {
 		Map<String, Object> update = updates.take();
 		if (update != null) {
+			if(((long)update.get("time")) < 90000){
+				doomsday = true;
+			}
 			@SuppressWarnings("unchecked")
 			Collection<JSONObject> mapUpdates = (Collection<JSONObject>) update.get("tile_updates");
 			addMapUpdate(mapUpdates);
@@ -188,7 +192,7 @@ public class Client {
 			} catch (Exception e) {
 				moveUnit(unit.id, Directions.values()[(int) Math.floor(Math.random() * 4)], commands);
 			}
-		} else if (baseCoords != null && numWorkers > 22 && unit.id % 2 == 0) {
+		} else if ((baseCoords != null && ((numWorkers > 20 && unit.id % 2 == 0)||doomsday))) {
 			if(NavigationHelper.isNextTo(unit,gameMap.getTile(baseCoords))){
 				melee(unit.id,base.id,commands);
 			}
@@ -279,7 +283,7 @@ public class Client {
 	}
 
 	public void issueBaseCommand(JSONArray commands) {
-		if (numScouts < 3) {
+		if (numScouts < 5 && baseCoords == null) {
 			buildScout(commands);
 		} else {
 			buildWorker(commands);
