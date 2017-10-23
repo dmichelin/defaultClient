@@ -174,7 +174,7 @@ public class Client {
 	public void issueWorkerCommand(Unit unit, JSONArray commands) {
 		List<Tile> tilesWithResources = gameMap.getGameMap().values().stream().filter(tile -> tile.hasResource()).collect(Collectors.toList());
 		List<Unit> enemiesAdjacent = enemyUnits.values().stream().filter(unit1 -> !unit1.status.equalsIgnoreCase("dead") && NavigationHelper.isNextTo(unit, gameMap.getTile(unit1.getCoordinates()))).collect(Collectors.toList());
-		List<Unit> enemiesNearBase = enemyUnits.values().stream().filter(unit1 -> !unit1.status.equalsIgnoreCase("dead") && NavigationHelper.isNextToDist(friendlyBase, gameMap.getTile(unit1.getCoordinates()),4)).collect(Collectors.toList());
+		List<Unit> enemiesNearBase = enemyUnits.values().stream().filter(unit1 -> !unit1.status.equalsIgnoreCase("dead") && NavigationHelper.isNextToDist(friendlyBase, gameMap.getTile(unit1.getCoordinates()),5)).collect(Collectors.toList());
 		// if there are no resources, look for them
 		if (enemiesAdjacent.size() > 0) {
 			melee(unit.id, enemiesAdjacent.get(0).id, commands);
