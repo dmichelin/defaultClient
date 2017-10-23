@@ -68,7 +68,13 @@ public class NavigationHelper {
         long disty = Math.abs(tile.y-unit.y);
         long distx = Math.abs(tile.x-unit.x);
 
-        return distx+disty == 1 ||distx+disty == 1 ;
+        return distx+disty == 1 ||distx+disty == 0;
+    }
+    public static boolean isNextToDist(Unit unit, Tile tile, int dist){
+        long disty = Math.abs(tile.y-unit.y);
+        long distx = Math.abs(tile.x-unit.x);
+
+        return distx <= dist || disty <= dist ;
     }
 
 
